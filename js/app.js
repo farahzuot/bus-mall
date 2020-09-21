@@ -14,7 +14,7 @@ const leftImg = document.getElementById('left-img');
 const middleImg = document.getElementById('middle-img');
 const rightImg = document.getElementById('right-img');
 
-var rounds = 25;
+var rounds = 5;
 function Product(imgName,extension){
   this.imgName= imgName;
   this.extension= extension;
@@ -38,33 +38,38 @@ for (let i = 0; i < products.length; i++) {
 
 }
 
+var leftEl;
+var middleEl;
+var rightEl;
 
 function render() {
-  const leftEl = getRandomNumber(0,Product.data.length - 1);
-  const middleEl = getRandomNumber(0,Product.data.length - 1);
-  const rightEl = getRandomNumber(0,Product.data.length - 1);
 
-  if (leftEl !== middleEl && leftEl !== rightEl && middleEl !== rightEl) {
-    leftImg.src = Product.data[leftEl].path;
-    middleImg.src = Product.data[middleEl].path;
-    rightImg.src = Product.data[rightEl].path;
-    leftImg.alt = Product.data[leftEl].imgName;
-    middleImg.alt = Product.data[middleEl].imgName;
-    rightImg.alt = Product.data[rightEl].imgName;
-    leftImg.title = Product.data[leftEl].imgName;
-    middleImg.title = Product.data[middleEl].imgName;
-    rightImg.title = Product.data[rightEl].imgName;
-  }
+  do {
+    leftEl = getRandomNumber(0,Product.data.length - 1);
+    middleEl = getRandomNumber(0,Product.data.length - 1);
+    rightEl = getRandomNumber(0,Product.data.length - 1);
 
-  if(Product.data[leftEl].imgName === leftImg.alt ){
-    Product.data[leftEl].numOfShown++;
   }
-  if (Product.data[middleEl].imgName === middleImg.alt) {
-    Product.data[middleEl].numOfShown++;
-  }
-  if (Product.data[rightEl].imgName === rightImg.alt){
-    Product.data[rightEl].numOfShown++;
-  }
+  while (leftEl === middleEl || leftEl === rightEl || middleEl === rightEl);
+
+
+  leftImg.src = Product.data[leftEl].path;
+  middleImg.src = Product.data[middleEl].path;
+  rightImg.src = Product.data[rightEl].path;
+  leftImg.alt = Product.data[leftEl].imgName;
+  middleImg.alt = Product.data[middleEl].imgName;
+  rightImg.alt = Product.data[rightEl].imgName;
+  leftImg.title = Product.data[leftEl].imgName;
+  middleImg.title = Product.data[middleEl].imgName;
+  rightImg.title = Product.data[rightEl].imgName;
+
+  Product.data[leftEl].numOfShown++;
+  Product.data[middleEl].numOfShown++;
+  Product.data[rightEl].numOfShown++;
+
+  // if (leftEl !== middleEl && leftEl !== rightEl && middleEl !== rightEl) {
+
+
 }
 
 
@@ -72,16 +77,21 @@ function render() {
 section.addEventListener('click',action);
 function action(event) {
 
-  if(event.target.id !== 'section'){
+  if(event.target.id !== 'sec2'){
+    rounds --;
+    if (rounds === 0 ) {
+      result();
+      section.removeEventListener('click',action);
+    }
     for (let i = 0; i < Product.data.length; i++) {
       if(Product.data[i].imgName === event.target.title){
         Product.data[i].vote++;
       }
     }
     render();
-    result();
   }
 }
+
 render();
 
 
@@ -105,5 +115,5 @@ function result() {
 }
 
 function getRandomNumber(min,max) {
-  return Math.ceil(Math.random() * (max - min + 1)) + min;
+  return Math.ceil(Math.random() * (max - min )) + min;
 }
