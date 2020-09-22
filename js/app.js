@@ -1,4 +1,5 @@
 'use strict';
+var list = document.getElementById('list');
 var products = [
   'bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon',
   'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'
@@ -20,6 +21,71 @@ function Product(imgName, extension) {
   Product.data.push(this);
 }
 Product.data = [];
+
+function updateProducts() {
+
+  var productsString = JSON.stringify(Product.data);
+  localStorage.setItem('products', productsString);
+}
+updateProducts();
+
+function getProducts() {
+
+  var productsString = localStorage.getItem('products');
+  var productsArray = JSON.parse(productsString);
+
+  if (productsArray) {
+    for (var i = 0; i < productsArray.length; i++) {
+      new Product(
+        productsArray[i].imgName,
+        productsArray[i].extension,
+        productsArray[i].path,
+        productsArray[i].vote,
+        productsArray[i].numOfShown
+      );
+    }
+    renderProducts();
+  }
+}
+getProducts();
+
+function eventHandler(event) {
+
+  event.preventDefault();
+  console.log(event.target);
+
+
+  var product = event.target;
+  var imagename = product.imgName.value;
+  var ext = product.extension.value;
+  var path = product.path.value;
+  var vote = product.vote.value;
+  var shown = product.numOfShown.value;
+
+  new Product(imagename, ext, path, vote,shown );
+
+  updateProducts();
+  renderProducts();
+}
+
+
+function renderProducts() {
+
+  list.textContent = '';
+  console.log('the products to show',Product.data);
+  for (var i = 0; i < Product.data.length; i++) {
+    var productLI = document.createElement('li');
+    var ParaResult = document.createElement('p');
+    ParaResult.textContent = (`${products[i]} had ${Product.data[i].vote} votes and was shown ${Product.data[i].numOfShown}`);
+
+    productLI.appendChild(ParaResult);
+    list.appendChild(productLI);
+  }
+}
+getProducts();
+section.addEventListener('click', eventHandler);
+
+
 console.log(Product.data);
 for (let i = 0; i < products.length; i++) {
   if (products[i] === 'sweep') {
@@ -110,9 +176,39 @@ function newChart() {
             'rgba(10,20,30,0.3)',
             'rgba(10,20,30,0.3)',
             'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
+            'rgba(10,20,30,0.3)',
             'rgba(10,20,30,0.3)'
           ],
           borderColor: [
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
+            'rgba(10,20,30,1)',
             'rgba(10,20,30,1)',
             'rgba(10,20,30,1)',
             'rgba(10,20,30,1)',
@@ -129,9 +225,39 @@ function newChart() {
             'rgba(50,150,200,0.3)',
             'rgba(50,150,200,0.3)',
             'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
+            'rgba(50,150,200,0.3)',
             'rgba(50,150,200,0.3)'
           ],
           borderColor: [
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
+            'rgba(50,150,200,1)',
             'rgba(50,150,200,1)',
             'rgba(50,150,200,1)',
             'rgba(50,150,200,1)',
@@ -180,7 +306,6 @@ function result() {
   }
   console.log(Product.data);
   var result = document.getElementById('sec3');
-  var list = document.createElement('ul');
   result.appendChild(list);
   var paragraph = document.createElement('p');
   list.appendChild(paragraph);
