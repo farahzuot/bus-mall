@@ -33,39 +33,25 @@ for (let i = 0; i < products.length; i++) {
 var leftEl;
 var middleEl;
 var rightEl;
-var leftIn;
-var middleIn;
-var rightIn;
+
 var arr1 = [];
-var arr2 = [];
+
 function render() {
+
   do {
-    do {
-      leftEl = getRandomNumber(0, Product.data.length - 1);
-      middleEl = getRandomNumber(0, Product.data.length - 1);
-      rightEl = getRandomNumber(0, Product.data.length - 1);
-      arr1.push(leftEl);
-      arr1.push(middleEl);
-      arr1.push(rightEl);
-      // console.log(arr1);
-    }
-    while (leftEl === middleEl || leftEl === rightEl || middleEl === rightEl);
-    do {
-      leftIn = getRandomNumber(0, Product.data.length - 1);
-      middleIn = getRandomNumber(0, Product.data.length - 1);
-      rightIn = getRandomNumber(0, Product.data.length - 1);
-      arr1.push(leftIn);
-      arr1.push(middleIn);
-      arr1.push(rightIn);
-      // console.log(arr2);
-    }
-    while (leftIn === middleIn || leftIn === rightIn || middleIn === rightIn);
+    leftEl = getRandomNumber(0, Product.data.length - 1);
+    middleEl = getRandomNumber(0, Product.data.length - 1);
+    rightEl = getRandomNumber(0, Product.data.length - 1);
+    arr1.push(leftEl);
+    arr1.push(middleEl);
+    arr1.push(rightEl);
   }
-  while (arr1 === arr2);
-  // console.log(arr1);
-  // console.log(arr2);
+  while (leftEl === middleEl || leftEl === rightEl || middleEl === rightEl);
+
+
+
   trial1();
-  trial2();
+
 }
 function trial1() {
   leftImg.src = Product.data[leftEl].path;
@@ -81,20 +67,7 @@ function trial1() {
   Product.data[middleEl].numOfShown++;
   Product.data[rightEl].numOfShown++;
 }
-function trial2() {
-  leftImg.src = Product.data[leftIn].path;
-  middleImg.src = Product.data[middleIn].path;
-  rightImg.src = Product.data[rightIn].path;
-  leftImg.alt = Product.data[leftIn].imgName;
-  middleImg.alt = Product.data[middleIn].imgName;
-  rightImg.alt = Product.data[rightIn].imgName;
-  leftImg.title = Product.data[leftIn].imgName;
-  middleImg.title = Product.data[middleIn].imgName;
-  rightImg.title = Product.data[rightIn].imgName;
-  Product.data[leftIn].numOfShown++;
-  Product.data[middleIn].numOfShown++;
-  Product.data[rightIn].numOfShown++;
-}
+
 section.addEventListener('click', action);
 function action(event) {
   if (event.target.id !== 'sec2') {
@@ -222,5 +195,3 @@ function result() {
 function getRandomNumber(min, max) {
   return Math.ceil(Math.random() * (max - min)) + min;
 }
-
-
