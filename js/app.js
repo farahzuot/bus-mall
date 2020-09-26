@@ -11,7 +11,8 @@ const section = document.getElementById('sec2');
 const leftImg = document.getElementById('left-img');
 const middleImg = document.getElementById('middle-img');
 const rightImg = document.getElementById('right-img');
-var rounds = 5;
+var rounds = 25;
+
 function Product(imgName, extension) {
   this.imgName = imgName;
   this.extension = extension;
@@ -22,71 +23,35 @@ function Product(imgName, extension) {
 }
 Product.data = [];
 
-function updateProducts() {
 
-  var productsString = JSON.stringify(Product.data);
-  localStorage.setItem('products', productsString);
+function updateProducts() {
+  var ProductString = JSON.stringify(Product.data);
+  localStorage.setItem('products', ProductString);
 }
-updateProducts();
+
 
 function getProducts() {
-
-  var productsString = localStorage.getItem('products');
-  var productsArray = JSON.parse(productsString);
-
+  var ProductString = localStorage.getItem('products');
+  console.log('products', ProductString);
+  var productsArray = JSON.parse(ProductString);
+  console.log('arr', productsArray);
   if (productsArray) {
-    for (var i = 0; i < productsArray.length; i++) {
-      new Product(
-        productsArray[i].imgName,
-        productsArray[i].extension,
-        productsArray[i].path,
-        productsArray[i].vote,
-        productsArray[i].numOfShown
-      );
-    }
-    renderProducts();
+    // for (var i = 0; i < productsArray.length; i++) {
+    //   new Product(
+    //     productsArray[i].imgName,
+    //     productsArray[i].extension,
+    //     productsArray[i].path,
+    //     productsArray[i].vote,
+    //     productsArray[i].numOfShown
+    //   );
+    // }
   }
-}
-getProducts();
-
-function eventHandler(event) {
-
-  event.preventDefault();
-  console.log(event.target);
-
-
-  var product = event.target;
-  var imagename = product.imgName.value;
-  var ext = product.extension.value;
-  var path = product.path.value;
-  var vote = product.vote.value;
-  var shown = product.numOfShown.value;
-
-  new Product(imagename, ext, path, vote,shown );
-
-  updateProducts();
-  renderProducts();
+  render();
 }
 
 
-function renderProducts() {
-
-  list.textContent = '';
-  console.log('the products to show',Product.data);
-  for (var i = 0; i < Product.data.length; i++) {
-    var productLI = document.createElement('li');
-    var ParaResult = document.createElement('p');
-    ParaResult.textContent = (`${products[i]} had ${Product.data[i].vote} votes and was shown ${Product.data[i].numOfShown}`);
-
-    productLI.appendChild(ParaResult);
-    list.appendChild(productLI);
-  }
-}
-getProducts();
-section.addEventListener('click', eventHandler);
 
 
-console.log(Product.data);
 for (let i = 0; i < products.length; i++) {
   if (products[i] === 'sweep') {
     new Product(products[i], extensions[1]);
@@ -96,43 +61,39 @@ for (let i = 0; i < products.length; i++) {
     new Product(products[i], extensions[0]);
   }
 }
-var leftEl;
-var middleEl;
-var rightEl;
 
-var arr1 = [];
+
+function setImage(image) {
+  const index = uniqueIndex();
+  image.src = Product.data[index].path;
+  image.alt = Product.data[index].imgName;
+  image.title = Product.data[index].imgName;
+  Product.data[index].numOfShown++;
+
+}
+
+let imagesShown = [];
+
+function uniqueIndex() {
+  let image;
+  do {
+    image = getRandomNumber(0, Product.data.length - 1);
+  }
+  while (imagesShown.includes(image));
+  imagesShown.push(image);
+
+  if (imagesShown.length > 6) {
+    imagesShown.splice(0, 3);
+  }
+  return image;
+}
 
 function render() {
-
-  do {
-    leftEl = getRandomNumber(0, Product.data.length - 1);
-    middleEl = getRandomNumber(0, Product.data.length - 1);
-    rightEl = getRandomNumber(0, Product.data.length - 1);
-    arr1.push(leftEl);
-    arr1.push(middleEl);
-    arr1.push(rightEl);
-  }
-  while (leftEl === middleEl || leftEl === rightEl || middleEl === rightEl);
-
-
-
-  trial1();
-
+  setImage(leftImg);
+  setImage(middleImg);
+  setImage(rightImg);
 }
-function trial1() {
-  leftImg.src = Product.data[leftEl].path;
-  middleImg.src = Product.data[middleEl].path;
-  rightImg.src = Product.data[rightEl].path;
-  leftImg.alt = Product.data[leftEl].imgName;
-  middleImg.alt = Product.data[middleEl].imgName;
-  rightImg.alt = Product.data[rightEl].imgName;
-  leftImg.title = Product.data[leftEl].imgName;
-  middleImg.title = Product.data[middleEl].imgName;
-  rightImg.title = Product.data[rightEl].imgName;
-  Product.data[leftEl].numOfShown++;
-  Product.data[middleEl].numOfShown++;
-  Product.data[rightEl].numOfShown++;
-}
+
 
 section.addEventListener('click', action);
 function action(event) {
@@ -148,9 +109,12 @@ function action(event) {
         Product.data[i].vote++;
       }
     }
+    updateProducts();
     render();
   }
 }
+
+getProducts();
 
 function newChart() {
   var ctx = document.getElementById('myChart');
@@ -301,9 +265,7 @@ function newChart() {
 
 render();
 function result() {
-  for (let i = 0; i < Product.data.length; i++) {
-    console.log('shown', Product.data[i].numOfShown);
-  }
+
   console.log(Product.data);
   var result = document.getElementById('sec3');
   result.appendChild(list);
